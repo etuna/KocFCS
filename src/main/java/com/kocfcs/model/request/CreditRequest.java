@@ -1,6 +1,6 @@
-package com.kocfcs.model;
+package com.kocfcs.model.request;
 
-public class CreaditRequest {
+public class CreditRequest {
 
 	private String idNumber;
 	private String name;
