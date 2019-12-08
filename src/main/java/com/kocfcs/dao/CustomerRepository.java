@@ -9,5 +9,6 @@ import com.kocfcs.model.Customer;
 
 @Repository
 public interface CustomerRepository extends JpaRepository<Customer, String> {
-	Customer findById(String idNumber);
+	Customer findByIdNumber(String idNumber);
+
 }

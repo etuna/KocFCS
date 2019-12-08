@@ -5,6 +5,9 @@ public class CreditResponse {
 	private String result;
 	private String desc;
 	
+	public CreditResponse(String string, String string2) {
+		// TODO Auto-generated constructor stub
+	}
 	public String getResult() {
 		return result;
 	}
