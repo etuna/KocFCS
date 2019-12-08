@@ -7,7 +7,9 @@ public class CreditResponse {
 	private int amount;
 	
 	public CreditResponse(String string, String string2, int amount) {
-		// TODO Auto-generated constructor stub
+		this.result = string;
+		this.desc= string2;
+		this.amount = amount;
 	}
 	public String getResult() {
 		return result;
