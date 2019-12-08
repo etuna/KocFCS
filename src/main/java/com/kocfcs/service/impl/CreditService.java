@@ -2,10 +2,13 @@ package com.kocfcs.service.impl;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.logging.Logger;
 
+import org.hibernate.annotations.common.util.impl.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.kocfcs.controller.CreditController;
 import com.kocfcs.dao.CreditApplicationRepository;
 import com.kocfcs.dao.CustomerRepository;
 import com.kocfcs.model.CreditApplication;
@@ -18,6 +21,9 @@ import com.kocfcs.util.Constant;
 @Service
 public class CreditService implements ICreditService {
 
+
+	private static org.jboss.logging.Logger logger = LoggerFactory.logger(CreditService.class);
+	
 	@Autowired
 	private CustomerRepository customerRepository;
 	
@@ -27,11 +33,15 @@ public class CreditService implements ICreditService {
 	@Override
 	public CreditResponse handleRequest(CreditRequest creditRequest) {
 
+		logger.info("Handling request...");
 		Customer customer = customerRepository.findByIdNumber(creditRequest.getIdNumber());
+		
 		if(customer == null) {
+			logger.info("No such customer...");
 			return getCustomerNotFoundResponse();
 		}
 		
+		logger.info("Customer found");
 		if (customer.getCreditScore() <= 500) {
 			processCreditRequestFail(creditRequest, customer, 0);
 			return getFailResponse();
@@ -41,6 +51,7 @@ public class CreditService implements ICreditService {
 				return getSuccessResponse(10000);				
 			}else {
 				// Else ??
+				processCreditRequestFail(creditRequest, customer, 0);
 				return getFailResponse();		
 			}
 		} else {
@@ -66,6 +77,7 @@ public class CreditService implements ICreditService {
 
 	public boolean processCreditRequestSuccess(CreditRequest creditRequest, Customer customer, int credit) {
 		try {
+
 			CreditApplication creditApplication = new CreditApplication();
 			UUID uuid = UUID.randomUUID();
 			creditApplication.setId(uuid.toString());
@@ -82,6 +94,7 @@ public class CreditService implements ICreditService {
 			customer.setCredit(credit);
 			customerRepository.save(customer);
 			sendSMS(creditRequest.getMsisdn());
+
 			return true;
 		} catch (Exception e) {
 			return false;
