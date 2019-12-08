@@ -1,4 +1,4 @@
-package com.example.kocfcs;
+package com.kocfcs;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
